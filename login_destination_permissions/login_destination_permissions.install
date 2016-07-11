@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Login Destination module.
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function login_destination_permissions_install() {
+  $spec = array(
+        'type' => 'text',
+        'length' => 2048,
+        'description' => 'Permissions to perform redirect for',
+  ); 
+  db_add_field('login_destination', 'permission', $spec);
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function login_destination_permissions_uninstall() {
+  db_drop_field('login_destination', 'permission');
+}

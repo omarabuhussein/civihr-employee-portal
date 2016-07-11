@@ -1,0 +1,9 @@
+
+name = Login Destination Permissions
+description = Create login destination rules based on user permissions.
+core = 7.x
+dependencies[] = login_destination
+files[] = login_destination_permissions.module
+files[] = login_destination_permissions.admin.inc
+configure = admin/config/people/login-destination
+

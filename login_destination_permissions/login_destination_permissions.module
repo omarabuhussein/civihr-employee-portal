@@ -1,0 +1,112 @@
+<?php
+
+/**
+ * @file
+ * Control where users are directed to, once they login
+ */
+
+
+/**
+ * Implements hook_menu().
+ */
+function login_destination_permissions_menu() {
+
+  $items['admin/login-destination-permission/autocomplete'] = array(
+    'page callback' => '_login_destination_permissions_options',
+    'access arguments' => array('administer users'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+/**
+ * Category edit page.
+ */
+function login_destination_permissions_form_alter(&$form, &$form_state, $form_id) {
+  // default values
+  if ($form_id == 'login_destination_edit_form') {
+
+    if (isset($form_state['build_info']['args'][0]['permission'])) {
+      $default_permission_options = unserialize($form_state['build_info']['args'][0]['permission']);
+      $default_permission_options_string = implode(', ', $default_permission_options);
+      if (empty($default_permission_options_string)) {
+        $default_permission_options_string = '';
+      }
+    }
+
+    $form['permission'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Redirect users with permissions'),
+      '#autocomplete_path' => 'admin/login-destination-permission/autocomplete',
+      '#default_value' => $default_permission_options_string,
+      '#description' => 'Redirect only users with following permissions. If you select no permissions, no permission check will be made. If multiple permissions selected, the user should have all the permissions for a successful redirect.',
+    );
+
+    $form['#submit'][] = 'login_destination_permissions_edit_form_alter_submit';
+  }
+}
+
+/**
+ * Process the contact category edit page form submission.
+ */
+function login_destination_permissions_edit_form_alter_submit($form, &$form_state) {
+                                                                               
+  $form_state['values']['permission'] = array_map('trim', explode(',', $form_state['values']['permission']));
+  $form_state['values']['permission'] = serialize(array_filter($form_state['values']['permission']));
+
+  db_update('login_destination')
+  ->fields(array(
+          'permission' => $form_state['values']['permission'],
+          )
+  )
+  ->condition('id', $form_state['values']['id'])
+  ->execute();
+}
+
+/**
+ * A helper function to provide permission options
+ */
+function _login_destination_permissions_options($string) {
+
+  $permissions_list = array();
+
+  if ($string) {
+    $items = array_map('trim', explode(',', $string));
+    $last_item = array_pop($items);
+    $prefix = implode(', ', $items);
+    $permissions = module_invoke_all('permission');
+    foreach ($permissions as $permission => $perm_item) {
+      if (!in_array($permission, $items)) {
+        $check = preg_match('/'.$last_item.'/i', $perm_item['title']);
+        if ($check == 1) {
+          $value = !empty($prefix) ? $prefix . ', ' . $permission : $permission;
+          $permissions_list[$value] = check_plain($perm_item['title']);
+        }
+      }  
+    }
+  }
+  drupal_json_output($permissions_list);
+  exit;
+}
+
+/**
+ * Implementation of HOOK_login_destination_match_rule_alter() 
+ */
+function login_destination_permissions_login_destination_match_rule_alter(&$page_match, $rule) {
+
+  if ($page_match) {
+    $rules_array = login_destination_load($rule->id);
+    $permissions = unserialize($rules_array['permission']);
+    $check = TRUE;
+    foreach ($permissions as $permission) {
+      if (user_access($permission) == FALSE) {
+        $check = FALSE;
+      }
+    }
+    if ($check == TRUE) {
+      $page_match = TRUE;
+    } else {
+      $page_match = FALSE;
+    }
+  } 
+}
