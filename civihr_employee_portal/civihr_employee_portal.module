@@ -278,6 +278,10 @@ function civihr_employee_portal_permission() {
       'title' => t('Access CiviHR manager approval screen'),
       'description' => t('Perfom manager approval related tasks for CiviHR.'),
     ),
+    'access civihr' => array(
+      'title' => t('Access CiviHR'),
+      'description' => t('Access CiviHR'),
+    ),
     'access private file download' => array(
       'title' => t('Access CiviHR absence attached files'),
       'description' => t('Availability to access the files attached for Absence.'),
