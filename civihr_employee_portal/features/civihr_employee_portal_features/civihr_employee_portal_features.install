@@ -99,6 +99,14 @@ function civihr_employee_portal_update_7000()
  * Create Report Pages and Report Age Settings menu links.
  */
 function civihr_employee_portal_update_7001() {
+    // Reports main menu
+    $menu = array(
+        'menu_name' => 'hr-reports',
+        'title' => 'Reports',
+        'description' => 'CiviHR Reports',
+    );
+    menu_save($menu);
+
     // Report1: People
     $path = 'reports/people/';
     $link = array();
@@ -128,6 +136,14 @@ function civihr_employee_portal_update_7001() {
         ),
     );
     menu_link_save($link);
+
+    // Reports settings menu
+    $menu = array(
+        'menu_name' => 'hr-reports-settings',
+        'title' => 'Reports settings',
+        'description' => 'CiviHR Reports settings',
+    );
+    menu_save($menu);
 
     // Age groups
     $path = 'reports/settings/age_group/';
