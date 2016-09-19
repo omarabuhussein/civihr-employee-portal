@@ -1,6 +1,6 @@
 name = CiviHR Default Permissions
 description = Assign Default Permissions to Default CiviHR roles
 core = 7.x
-package = Features
+package = Compucorp
 dependencies[] = civihr_employee_portal
 features[features_api][] = api:2
