@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * civihr_employee_portal_features.features.user_permission.inc
+ * civihr_default_permissions.features.user_permission.inc
  */
 
 /**
  * Implements hook_user_default_permissions().
  */
-function civihr_employee_portal_features_user_default_permissions() {
+function civihr_default_permissions_user_default_permissions() {
   $permissions = array();
 
   // Exported permission: 'Administer fancy login'.
