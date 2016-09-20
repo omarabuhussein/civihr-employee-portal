@@ -895,6 +895,15 @@ function civihr_default_permissions_user_default_permissions() {
     'module' => 'administerusersbyrole',
   );
 
+  // Exported permission: 'change document status'.
+  $permissions['change document status'] = array(
+    'name' => 'change document status',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'civihr_employee_portal',
+  );
+
   // Exported permission: 'change layouts in place editing'.
   $permissions['change layouts in place editing'] = array(
     'name' => 'change layouts in place editing',
