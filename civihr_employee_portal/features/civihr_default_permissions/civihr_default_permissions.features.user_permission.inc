@@ -1918,8 +1918,8 @@ function civihr_default_permissions_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'civihr_admin' => 'civihr_admin',
-      'civihr_staff' => 'civihr_staff',
       'civihr_manager' => 'civihr_manager',
+      'civihr_staff' => 'civihr_staff',
     ),
     'module' => 'civihr_employee_portal',
   );
